@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ngx-rollout-dep
+  name: ngx-rollour-dep
+spec:
+  minReadySeconds: 15
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ngx-rollout-dep
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ngx-rollout-dep
+    spec:
+      volumes:
+      - name: ngx-conf-vol
+        configMap:
+          name: ngx-conf-rollout
+      containers:
+      - image: nginx:1.22-alpine
+        name: nginx
+        resources: {}
+        ports:
+        - containerPort: 80
+
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d
+          name: ngx-conf-vol
+
